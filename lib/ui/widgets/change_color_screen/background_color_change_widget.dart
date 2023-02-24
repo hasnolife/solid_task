@@ -1,68 +1,28 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solid_task/ui/widgets/change_color_screen/background_color_change_model.dart';
 
 /// StateFull Widget that changes background color on tap
-class BackgroundColorChangeWidget extends StatefulWidget {
+class BackgroundColorChangeWidget extends StatelessWidget {
   /// Constructor
   const BackgroundColorChangeWidget({Key? key}) : super(key: key);
 
   @override
-  _BackgroundColorChangeWidgetState createState() =>
-      _BackgroundColorChangeWidgetState();
-}
-
-class _BackgroundColorChangeWidgetState
-    extends State<BackgroundColorChangeWidget> {
-  final double _opacity = 1;
-  final int _maxRandomRGB = 256;
-  final String _title = 'Hey there';
-  final TextStyle _titleStyle = const TextStyle(
-    fontSize: 35,
-    fontWeight: FontWeight.bold,
-  );
-
-  Color _backgroundColor = Colors.white;
-
-  Color _getRandomColor() {
-    final random = Random();
-
-    return Color.fromRGBO(
-      random.nextInt(_maxRandomRGB),
-      random.nextInt(_maxRandomRGB),
-      random.nextInt(_maxRandomRGB),
-      _opacity,
-    );
-  }
-
-  Color _getUniqueRandomColor() {
-    Color newColor;
-    do {
-      newColor = _getRandomColor();
-    } while (newColor == _backgroundColor);
-
-    return newColor;
-  }
-
-  void _changeBackgroundColor() {
-    setState(() {
-      _backgroundColor = _getUniqueRandomColor();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isDark = _backgroundColor.computeLuminance() < 0.5;
+    final model = context.read<BackgroundColorChangeModel>();
+    final backgroundColor = context
+        .select((BackgroundColorChangeModel model) => model.backgroundColor);
+    final isDark = backgroundColor.computeLuminance() < 0.5;
 
     return Scaffold(
       body: GestureDetector(
-        onTap: _changeBackgroundColor,
+        onTap: model.changeBackgroundColor,
         child: ColoredBox(
-          color: _backgroundColor,
+          color: backgroundColor,
           child: Center(
             child: Text(
-              _title,
-              style: _titleStyle.copyWith(
+              model.title,
+              style: model.titleStyle.copyWith(
                 color: isDark ? Colors.white : Colors.black,
               ),
             ),
