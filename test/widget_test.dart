@@ -1,30 +1,54 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:solid_task/ui/widgets/my_app.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets(
+    'BackgroundColorChangeWidget changes background color on tap',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      final initialBackgroundColor = _getBackgroundColor(tester);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      await _tapOnGesture(tester);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+      final newBackgroundColor = _getBackgroundColor(tester);
+
+      expect(initialBackgroundColor, isNot(equals(newBackgroundColor)));
+    },
+  );
+
+  testWidgets(
+    'Text color is white on dark background',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      await _tapOnGesture(tester);
+
+      final newBackgroundColor = _getBackgroundColor(tester);
+      final colorBrightness =
+      ThemeData.estimateBrightnessForColor(newBackgroundColor);
+      final titleFinder = find.text('Hey there');
+      final titleWidget = tester.widget<Text>(titleFinder);
+      final titleColor = titleWidget.style?.color;
+
+      if (colorBrightness == Brightness.dark) {
+        expect(titleColor, Colors.white);
+      } else {
+        expect(titleColor, isNot(Colors.white));
+      }
+    },
+  );
+}
+
+Color _getBackgroundColor(WidgetTester tester) {
+  final coloredBox = tester.widget<ColoredBox>(find.byType(ColoredBox));
+
+  return coloredBox.color;
+}
+
+Future<void> _tapOnGesture(WidgetTester tester) async {
+  await tester.tap(find.byType(GestureDetector));
+  await tester.pump();
 }
