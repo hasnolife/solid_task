@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solid_task/ui/widgets/change_color_screen/background_color_change_model.dart';
 
-/// StateFull Widget that changes background color on tap
+/// Stateless Widget that changes background color on tap
 class BackgroundColorChangeWidget extends StatelessWidget {
   /// Constructor
   const BackgroundColorChangeWidget({Key? key}) : super(key: key);
