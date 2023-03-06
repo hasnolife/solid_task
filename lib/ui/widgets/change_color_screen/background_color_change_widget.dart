@@ -12,18 +12,17 @@ class BackgroundColorChangeWidget extends StatelessWidget {
     final model = context.read<BackgroundColorChangeModel>();
     final backgroundColor = context
         .select((BackgroundColorChangeModel model) => model.backgroundColor);
-    final isDark = backgroundColor.computeLuminance() < 0.5;
 
     return Scaffold(
       body: GestureDetector(
-        onTap: model.changeBackgroundColor,
+        onTap: model.changeUnicColor,
         child: ColoredBox(
           color: backgroundColor,
           child: Center(
             child: Text(
               model.title,
               style: model.titleStyle.copyWith(
-                color: isDark ? Colors.white : Colors.black,
+                color: model.textColor,
               ),
             ),
           ),
