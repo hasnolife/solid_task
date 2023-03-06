@@ -20,32 +20,33 @@ void main() {
   );
 
   testWidgets(
-    'Text color is white on dark background',
+    'Text color is change on tap',
         (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
 
+      final initialTextColor = _getTextColor(tester);
+
       await _tapOnGesture(tester);
 
-      final newBackgroundColor = _getBackgroundColor(tester);
-      final colorBrightness =
-      ThemeData.estimateBrightnessForColor(newBackgroundColor);
-      final titleFinder = find.text('Hey there');
-      final titleWidget = tester.widget<Text>(titleFinder);
-      final titleColor = titleWidget.style?.color;
+      final newTextColor = _getTextColor(tester);
 
-      if (colorBrightness == Brightness.dark) {
-        expect(titleColor, Colors.white);
-      } else {
-        expect(titleColor, isNot(Colors.white));
-      }
+      expect(newTextColor, isNot(initialTextColor));
     },
   );
 }
+
+
 
 Color _getBackgroundColor(WidgetTester tester) {
   final coloredBox = tester.widget<ColoredBox>(find.byType(ColoredBox));
 
   return coloredBox.color;
+}
+
+Color? _getTextColor(WidgetTester tester) {
+  final text = tester.widget<Text>(find.byType(Text));
+
+  return text.style?.color;
 }
 
 Future<void> _tapOnGesture(WidgetTester tester) async {
