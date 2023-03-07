@@ -21,7 +21,7 @@ class BackgroundColorChangeModel extends ChangeNotifier {
   /// Get our backgroundColor from _backgroundColor
   Color get backgroundColor => _backgroundColor;
 
-  /// Get our textColor from _backgroundColor
+  /// Get our textColor from function _getRandomColor()
   Color get textColor => _getRandomColor();
 
   /// Change color
